@@ -99,12 +99,3 @@ STRESS=0 bash run_bench.sh   # skip the stress run
 
 Timings go to `logs/results.csv` (3 repeats of every size × process count). `check_summary.txt` lists the 16 small-file correctness checks.
 
-## 7. Two machines (optional)
-
-Power on **SIT315-Node** too, then on the head:
-
-```bash
-NODE_IP=192.168.57.129 bash run_bench.sh
-```
-
-That copies `traffic_mpi` and `medium.csv` to the same path on the node and runs `mpirun -np 4 -f cluster`. In `shared` mode every machine must have the input file at the same path. In `scatter` mode only the head needs it.
