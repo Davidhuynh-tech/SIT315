@@ -1,0 +1,7 @@
+*.csv
+!small.csv
+data_gen
+traffic_seq
+traffic_mpi
+*_mpi_p*.txt
+*_seq.txt
