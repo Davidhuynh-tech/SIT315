@@ -93,7 +93,7 @@ All runs are on the one head VM (shared-memory MPI transport). `Time_ms` starts 
 
 `run_bench.sh` ran the MPI program with P = 1, 2, 3, 4 × `--part pair|hour` × `--exchange alltoallv|p2p`, which is 16 runs. All 16 printed checksum **15810** and top-N output byte-identical to `traffic_seq` (`logs/check_summary.txt`). `--input scatter --no-combine` with 3 processes also gives 15810.
 
-![Small run, 4 processes](screenshots/small_run_p4.png)
+![Small run, 4 processes](Evidence/small_run_p4.png)
 
 Every larger run also matched the sequential checksum (`logs/results.csv`): xl 167552348426, medium 16595023395934, large 197737095553059.
 
@@ -107,7 +107,7 @@ Three sizes, sequential plus 1–4 processes, 3 repeats each. The table shows th
 | medium | 6,912,000 | 3,661 | 3,857 | 1,873 | 1,311 | 1,039 | 1.95 | 2.79 | 3.52 | 0.88 |
 | large | 24,000,000 | 12,463 | 13,562 | 6,583 | 4,622 | 3,667 | 1.89 | 2.70 | 3.40 | 0.85 |
 
-![Large dataset: sequential vs 4 processes](screenshots/large_seq_vs_p4.png)
+![Large dataset: sequential vs 4 processes](Evidence/large_seq_vs_p4.png)
 
 Phase breakdown for `large.csv`, P = 4 (`logs/large_p4_combine.txt`):
 
@@ -143,7 +143,7 @@ Phase_ms (slowest rank): read+map 3866.86  shuffle 216.88  reduce 69.96  gather 
 | `skew_day.csv`, no combiner | hour | 12000 / 88000 / 12000 / 12000 | 2.84 | 33.69 | 28.79 | 305 |
 | `skew_day.csv`, no combiner | pair | 30998 / 31002 / 31000 / 31000 | 1.00 | 23.06 | 1.71 | 280 |
 
-![Skewed day: hour vs pair partitioning](screenshots/skew_hour_vs_pair.png)
+![Skewed day: hour vs pair partitioning](Evidence/skew_hour_vs_pair.png)
 
 `skew_day.csv` has only two busy hours, and the hour partitioner happens to hash both to rank 1. That rank owns 71% of the keys, and rank 0 then waits about 29 ms in the gather for it to finish. Partitioning by `(hour, light)` puts each key independently, so even one huge hour is spread across all ranks. The top N stays correct because each pair total is still complete on one rank (section 3, step 7). Every skew run printed the same checksum as `traffic_seq`.
 
@@ -184,6 +184,6 @@ Reason: without the combiner every row becomes a 32-byte `KV`, and it exists abo
 | --- | --- |
 | Design document | `DESIGN.md` (this file) |
 | Code | `traffic_mpi.cpp`, `traffic_common.hpp`, `traffic_seq.cpp`, `data_gen.cpp`, `Makefile`, `run_bench.sh` |
-| Screenshots | `screenshots/small_run_p4.png`, `screenshots/large_seq_vs_p4.png`, `screenshots/skew_hour_vs_pair.png` |
+| Screenshots | `Evidence/small_run_p4.png`, `Evidence/large_seq_vs_p4.png`, `Evidence/skew_hour_vs_pair.png` |
 | Example data file | `small.csv` (others are made with `data_gen`, see README) |
 | Run transcripts | `logs/` |
